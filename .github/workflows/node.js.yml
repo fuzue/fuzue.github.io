@@ -35,7 +35,7 @@ jobs:
     - run: cp -r build _site/
     - run: echo "fuzue.tech" > _site/CNAME
     - name: Upload Pages artifact
-      uses: actions/upload-pages-artifact@v2
+      uses: actions/upload-pages-artifact@v3
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v2 # or the latest "vX.X.X" version tag for this action

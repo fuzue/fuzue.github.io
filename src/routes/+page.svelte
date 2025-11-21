@@ -30,12 +30,11 @@
 </script>
 
 
-<div class="h-[150vh]" style:background-color="hsl({randomNum}, 100%, 40%)">
+<div class="h-[150vh]" style:background-color="white">
 	<div class="sticky h-[100vh] top-0 flex justify-center p-[10%]">
-		<ChangingLogo bind:this={changingLogo} />
+    <img src="/fuzue-logo.png">
 		<div class="absolute bottom-10 text-slate-950 font-sans text center flex flex-col items-center">
-			<p class="text-3xl">fuzue@fuzue.tech</p>
-			<p class="text-xl">site coming soon</p>
+			<p class="text-3xl">contact@fuzue.tech</p>
 		</div>
 	</div>
 </div>

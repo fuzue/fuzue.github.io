@@ -30,7 +30,7 @@
 </script>
 
 
-<div class="h-[150vh]" style:background-color="white">
+<div class="" style:background-color="white">
 	<div class="sticky h-[100vh] top-0 flex justify-center p-[10%]">
     <img src="/fuzue-logo.png">
 		<div class="absolute bottom-10 text-slate-950 font-sans text center flex flex-col items-center">

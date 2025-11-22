@@ -32,7 +32,7 @@
 
 <div class="" style:background-color="white">
 	<div class="sticky h-[100vh] top-0 flex justify-center p-[10%]">
-    <img src="/fuzue-logo.png">
+    <img src="/fuzue-logo.png" class="max-w-full max-h-full object-contain">
 		<div class="absolute bottom-10 text-slate-950 font-sans text center flex flex-col items-center">
 			<p class="text-3xl">contact@fuzue.tech</p>
 		</div>

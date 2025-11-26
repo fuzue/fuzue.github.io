@@ -2,4 +2,4 @@
 	import MainContent from '$lib/MainContent.svelte';
 </script>
 
-<MainContent initialSection={0} />
+<MainContent initialSection={3} />

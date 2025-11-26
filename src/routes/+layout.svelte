@@ -3,6 +3,6 @@
   import "../app.css";
 </script>
 
-<div class="min-h-screen">
+<div class="min-h-screen w-full">
   <slot />
 </div>

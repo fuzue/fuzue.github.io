@@ -1,5 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-section { @apply min-h-screen; }
+/* CSS Variables for font */
+:root {
+  --main-font: 'Outfit', sans-serif;
+}
+
+/* Ensure full width on all devices */
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  /* Disable momentum scrolling that can cause jumping */
+  -webkit-overflow-scrolling: auto;
+  scroll-behavior: auto;
+  /* Apply dynamic font */
+  font-family: var(--main-font);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Prevent momentum scrolling on touch devices */
+html {
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+}
+
+/* Add CSS scroll snap for better control */
+body {
+  scroll-snap-type: y mandatory;
+}
+
+section:first-child {
+  scroll-snap-align: start;
+}
+
+section:not(:first-child) {
+  scroll-snap-align: start;
+  scroll-margin-top: 144px; /* Account for header height */
+  scroll-snap-stop: always;
+}

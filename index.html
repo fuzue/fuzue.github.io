@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fuzue — Research Software Engineering</title>
+  <style>
+    @font-face { font-family: 'Big Shoulders Display'; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/BigShouldersDisplay-700.ttf') format('truetype'); }
+    @font-face { font-family: 'Big Shoulders Display'; font-style: normal; font-weight: 900; font-display: swap; src: url('fonts/BigShouldersDisplay-900.ttf') format('truetype'); }
+    @font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/IBMPlexMono-400.ttf') format('truetype'); }
+    @font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url('fonts/IBMPlexMono-500.ttf') format('truetype'); }
+    @font-face { font-family: 'IBM Plex Sans'; font-style: italic; font-weight: 300; font-display: swap; src: url('fonts/IBMPlexSans-300italic.ttf') format('truetype'); }
+    @font-face { font-family: 'IBM Plex Sans'; font-style: normal; font-weight: 300; font-display: swap; src: url('fonts/IBMPlexSans-300.ttf') format('truetype'); }
+    @font-face { font-family: 'IBM Plex Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/IBMPlexSans-400.ttf') format('truetype'); }
+    @font-face { font-family: 'IBM Plex Sans'; font-style: normal; font-weight: 500; font-display: swap; src: url('fonts/IBMPlexSans-500.ttf') format('truetype'); }
+  </style>
+  <style>
+    /* === RESET === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080808;
+      --surface:   #111111;
+      --surface2:  #191919;
+      --text:      #FFFFFF;
+      --muted:     #C8C8C8;
+      --border:    #222222;
+      --accent:    #C8FF00;
+      --accent-bg: rgba(200,255,0,0.07);
+      --accent-br: rgba(200,255,0,0.18);
+      --font-d:    'Big Shoulders Display', sans-serif;
+      --font-b:    'IBM Plex Sans', sans-serif;
+      --font-m:    'IBM Plex Mono', monospace;
+      --max:       1000px;
+      --pad:       40px;
+      /* progress badge stripes (dark default) */
+      --pf-1: rgba(255,255,255,0.08);
+      --pf-2: rgba(255,255,255,0.13);
+      --pf-3: rgba(255,255,255,0.08);
+      --pf-4: rgba(255,255,255,0.05);
+      --pf-5: rgba(255,255,255,0.03);
+      --pf-6: rgba(255,255,255,0.015);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-b);
+      font-size: 18px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.28;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    /* === SHARED LAYOUT === */
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    section { border-bottom: 1px solid var(--border); }
+
+    .section-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 72px var(--pad);
+    }
+
+    .section-label {
+      font-family: var(--font-m);
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .section-label::after {
+      content: '';
+      height: 1px;
+      width: 32px;
+      background: var(--border);
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-d);
+      font-weight: 900;
+      font-size: clamp(30px, 4vw, 44px);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1.0;
+      margin-bottom: 14px;
+    }
+
+    .section-intro {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 48px;
+      line-height: 1.8;
+    }
+
+    /* Tags */
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-family: var(--font-m);
+      font-size: 10px;
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* === NAV === */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: #FFFFFF;
+      border-bottom: 3px solid var(--accent);
+    }
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--pad);
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .nav-logo img {
+      height: 50px;
+      display: block;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+      flex-shrink: 0;
+    }
+    .nav-links a {
+      font-family: var(--font-m);
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #888888;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.15s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { color: #080808; }
+    .nav-cta {
+      font-family: var(--font-m);
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      background: #080808;
+      color: #FFFFFF;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .nav-cta:hover { background: #333; }
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid #ddd;
+      color: #555;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 15px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .theme-toggle:hover { border-color: #aaa; color: #080808; }
+    .lang-switcher {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .lang-trigger {
+      font-family: var(--font-m);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      padding: 5px 10px;
+      background: transparent;
+      color: #555;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .lang-trigger:hover { color: #080808; border-color: #aaa; }
+    .lang-trigger::after {
+      content: '▾';
+      font-size: 10px;
+      color: #aaa;
+    }
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      display: none;
+      flex-direction: column;
+      z-index: 600;
+      min-width: 70px;
+    }
+    .lang-switcher.open .lang-menu { display: flex; }
+    .lang-btn {
+      font-family: var(--font-m);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      padding: 7px 14px;
+      background: transparent;
+      color: #555;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.1s, color 0.1s;
+      white-space: nowrap;
+    }
+    .lang-btn:hover { background: #f4f4f4; color: #080808; }
+    .lang-btn.active { color: #080808; font-weight: 500; }
+
+    /* === HERO === */
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 96px var(--pad) 80px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-eyebrow {
+      font-family: var(--font-m);
+      font-size: 14px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-family: var(--font-d);
+      font-weight: 900;
+      font-size: clamp(52px, 9vw, 96px);
+      line-height: 0.93;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+      max-width: 780px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+      -webkit-text-stroke: 0px;
+    }
+    .hero-sub {
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 400; }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 72px;
+    }
+    .btn-primary {
+      font-family: var(--font-m);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      background: var(--accent);
+      color: #080808;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.8; }
+    .btn-ghost {
+      font-family: var(--font-m);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+
+    /* Hero stats */
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border);
+      padding-top: 40px;
+    }
+    .stat { padding-right: 28px; }
+    .stat + .stat { padding-left: 28px; border-left: 1px solid var(--border); }
+    .stat-num {
+      font-family: var(--font-d);
+      font-weight: 900;
+      font-size: 56px;
+      line-height: 1;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-family: var(--font-d);
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text);
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+    }
+
+    /* === SERVICES === */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border);
+    }
+    .service-card {
+      padding: 36px 28px;
+      border-right: 1px solid var(--border);
+      transition: background 0.15s;
+      cursor: default;
+    }
+    .service-card:last-child { border-right: none; }
+    .service-card:hover { background: var(--surface); }
+    .service-num {
+      font-family: var(--font-m);
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+    }
+    .service-title {
+      font-family: var(--font-d);
+      font-weight: 700;
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+    .service-desc {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    /* === OPEN SOURCE === */
+    .oss-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .oss-card {
+      background: var(--bg);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: background 0.15s;
+    }
+    .oss-card:hover { background: var(--surface); }
+    .oss-status {
+      font-family: var(--font-m);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      background: var(--accent-bg);
+      color: var(--accent);
+      border: 1px solid var(--accent-br);
+      display: inline-block;
+      align-self: flex-start;
+    }
+    .oss-name {
+      font-family: var(--font-d);
+      font-weight: 700;
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      line-height: 1;
+    }
+    .oss-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .oss-link {
+      font-family: var(--font-m);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      text-decoration: none;
+      transition: opacity 0.15s;
+      margin-top: 4px;
+    }
+    .oss-link:hover { opacity: 0.7; }
+
+    /* === RESEARCH === */
+    .research-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .research-track {
+      background: var(--bg);
+      padding: 36px 32px;
+    }
+    .track-label {
+      font-family: var(--font-m);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+    .track-title {
+      font-family: var(--font-d);
+      font-weight: 700;
+      font-size: 24px;
+      text-transform: uppercase;
+      line-height: 1.05;
+      margin-bottom: 28px;
+    }
+    .research-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .research-item:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .ri-badge {
+      font-family: var(--font-m);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+    .ri-badge.published {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border: 1px solid var(--accent-br);
+    }
+    .ri-badge.progress {
+      position: relative;
+      overflow: hidden;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .ri-badge.progress::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--pf-1);
+      clip-path: polygon(0 0, 52% 0, 66% 100%, 0 100%);
+      pointer-events: none;
+    }
+    /* trailing stripes — angle set per-element by JS to match clip-path diagonal exactly */
+    .ri-badge.progress::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(var(--stripe-angle, 60deg),
+        transparent 58%,
+        var(--pf-2) 58%,   var(--pf-2) 61%,   transparent 61%,
+        transparent 63.5%, var(--pf-3) 63.5%, var(--pf-3) 65.5%, transparent 65.5%,
+        transparent 67%,   var(--pf-4) 67%,   var(--pf-4) 68.5%, transparent 68.5%,
+        transparent 70%,   var(--pf-5) 70%,   var(--pf-5) 71%,   transparent 71%,
+        transparent 72.5%, var(--pf-5) 72.5%, var(--pf-5) 73.5%, transparent 73.5%,
+        transparent 75%,   var(--pf-6) 75%,   var(--pf-6) 76%,   transparent 76%
+      );
+      pointer-events: none;
+    }
+    .ri-text {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .ri-text strong { color: var(--text); font-weight: 400; }
+    .ri-text a {
+      display: inline-block;
+      margin-top: 8px;
+      font-family: var(--font-m);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .ni-box {
+      margin-top: 28px;
+      padding: 18px 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .ni-num {
+      font-family: var(--font-d);
+      font-weight: 900;
+      font-size: 48px;
+      color: var(--accent);
+      line-height: 1;
+      flex-shrink: 0;
+      letter-spacing: -0.02em;
+    }
+    .ni-text {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .ni-text strong { color: var(--text); font-weight: 400; }
+
+    /* === WORK === */
+    .work-list { border: 1px solid var(--border); }
+    .work-item {
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .work-item:last-child { border-bottom: none; }
+    .work-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      padding: 28px 32px;
+      align-items: start;
+      transition: background 0.15s;
+    }
+    .work-item:hover .work-header { background: var(--surface); }
+    .work-client {
+      font-family: var(--font-m);
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .work-title {
+      font-family: var(--font-d);
+      font-weight: 700;
+      font-size: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .work-summary {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+    .work-badge {
+      font-family: var(--font-m);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .work-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .work-detail.open { max-height: 1200px; }
+    .work-detail-inner {
+      padding: 24px 32px 32px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .work-detail-inner p {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 12px;
+      line-height: 1.8;
+      max-width: 640px;
+    }
+    .work-detail-inner p strong { color: var(--text); font-weight: 400; }
+    .work-detail-inner p em { color: var(--text); font-style: italic; }
+    .work-outcome {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-m);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      text-decoration: none;
+      margin-top: 4px;
+      transition: opacity 0.15s;
+    }
+    .work-outcome:hover { opacity: 0.7; }
+
+    /* === ABOUT === */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+    .about-photo {
+      width: 220px;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: center top;
+      filter: grayscale(100%) contrast(1.1);
+      display: block;
+      border: 1px solid var(--border);
+    }
+    .about-photo-fallback {
+      width: 220px;
+      aspect-ratio: 3/4;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-m);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .about-name {
+      font-family: var(--font-d);
+      font-weight: 900;
+      font-size: 38px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 0.95;
+      margin-bottom: 10px;
+    }
+    .about-role {
+      font-family: var(--font-m);
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+    .about-text p {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 14px;
+      line-height: 1.8;
+    }
+    .about-text p strong { color: var(--text); font-weight: 400; }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 28px;
+    }
+    .skill-item {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.5;
+      transition: background 0.15s;
+    }
+    .skill-item:hover { background: var(--surface); }
+    .skill-item strong {
+      display: block;
+      color: var(--text);
+      font-weight: 400;
+      margin-bottom: 2px;
+      font-size: 13px;
+      font-family: var(--font-m);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* === CONTACT === */
+    #contact { background: var(--surface); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-left h2 {
+      font-family: var(--font-d);
+      font-weight: 900;
+      font-size: clamp(40px, 5vw, 60px);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 0.93;
+      margin-bottom: 20px;
+    }
+    .contact-left h2 span { color: var(--accent); }
+    .contact-left p {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .contact-direct {
+      font-family: var(--font-m);
+      font-size: 16px;
+      color: var(--text);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.15s;
+      letter-spacing: 0.02em;
+    }
+    .contact-direct:hover { color: var(--accent); }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-b);
+      font-size: 16px;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: #666; }
+    .contact-form select { color: var(--muted); }
+    .contact-form select option { background: var(--bg); color: var(--text); }
+    .contact-form input:focus,
+    .contact-form select:focus,
+    .contact-form textarea:focus { border-color: var(--accent); }
+    .contact-form textarea { resize: none; height: 100px; }
+    .contact-submit {
+      padding: 13px;
+      background: var(--accent);
+      color: #080808;
+      border: none;
+      font-family: var(--font-m);
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .contact-submit:hover { opacity: 0.8; }
+
+    /* === FOOTER === */
+    footer { border-top: 1px solid var(--border); }
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px var(--pad);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    footer .footer-logo {
+      font-family: var(--font-d);
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      color: #444;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      font-family: var(--font-m);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy {
+      font-family: var(--font-m);
+      font-size: 14px;
+      color: #888;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 720px) {
+      :root { --pad: 20px; }
+      .nav-links { display: none; }
+      .theme-toggle { display: none; }
+      .hero h1 { font-size: 52px; }
+      .hero-stats { grid-template-columns: repeat(2, 1fr); row-gap: 28px; }
+      .stat + .stat:nth-child(3) { border-left: none; padding-left: 0; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { border-right: none; border-bottom: 1px solid var(--border); }
+      .service-card:last-child { border-bottom: none; }
+      .oss-grid { grid-template-columns: 1fr; }
+      .research-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-photo { width: 100%; aspect-ratio: 3/4; max-width: 320px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .work-header { grid-template-columns: 1fr; }
+      .work-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <img src="fuzue-logo.png" alt="Fuzue">
+    </a>
+    <ul class="nav-links">
+      <li><a onclick="goTo('#services')" data-i18n="nav_services">Services</a></li>
+      <li><a onclick="goTo('#oss')" data-i18n="nav_oss">Open Source</a></li>
+      <li><a onclick="goTo('#research')" data-i18n="nav_research">Research</a></li>
+      <li><a onclick="goTo('#work')" data-i18n="nav_work">Work</a></li>
+      <li><a onclick="goTo('#about')" data-i18n="nav_about">About</a></li>
+    </ul>
+    <div class="lang-switcher" id="langSwitcher">
+      <button class="lang-trigger" id="langTrigger" onclick="toggleLangMenu(event)">EN</button>
+      <div class="lang-menu">
+        <button class="lang-btn active" data-lang="en" onclick="applyLang('en')">EN</button>
+        <button class="lang-btn" data-lang="it" onclick="applyLang('it')">IT</button>
+        <button class="lang-btn" data-lang="pl" onclick="applyLang('pl')">PL</button>
+        <button class="lang-btn" data-lang="pt" onclick="applyLang('pt')">PT</button>
+      </div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme" onclick="toggleTheme()">☀</button>
+    <button class="nav-cta" onclick="goTo('#contact')" data-i18n="nav_cta">Get in touch</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header>
+  <div class="hero">
+    <p class="hero-eyebrow" data-i18n="hero_eyebrow">Fuzue Tech · Research Software Engineering</p>
+    <h1 data-i18n-html="hero_h1">Precision software<br>for science that<br><em>moves fast</em></h1>
+    <p class="hero-sub" data-i18n-html="hero_sub">Fuzue builds research-grade tooling for laboratories and ML teams. We track the literature and <strong>implement what works</strong> — from custom hardware interfaces and bioinformatics pipelines to production ML systems and platforms.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="goTo('#work')" data-i18n="hero_btn_work">View work</button>
+      <button class="btn-ghost" onclick="goTo('#contact')" data-i18n="hero_btn_contact">Discuss a project</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">#5</div>
+        <div class="stat-label" data-i18n-html="stat1_label">Poland · Company research output<br>Nature Index</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">20+</div>
+        <div class="stat-label" data-i18n-html="stat2_label">Years engineering &amp;<br>scientific consulting</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">15M</div>
+        <div class="stat-label" data-i18n-html="stat3_label">Researcher conflicts analyzed<br>Follow The Grant</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3</div>
+        <div class="stat-label" data-i18n-html="stat4_label">Open source lab tools<br>in development</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <p class="section-label" data-i18n="services_label">What we do</p>
+    <h2 class="section-title" data-i18n="services_title">Three modes of engagement</h2>
+    <p class="section-intro" data-i18n="services_intro">Every project is direct — you work with the technical lead from day one.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-num">01</div>
+        <div class="service-title" data-i18n-html="svc1_title">Laboratory<br>Informatics</div>
+        <div class="service-desc" data-i18n="svc1_desc">Custom analysis pipelines, hardware integration, flow cytometry and bioreactor interfaces, bioinformatics tooling — built to support publication-quality research.</div>
+        <div class="tags">
+          <span class="tag">Julia</span>
+          <span class="tag">Python</span>
+          <span class="tag">ChiBio</span>
+          <span class="tag">Flow cytometry</span>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">02</div>
+        <div class="service-title" data-i18n-html="svc2_title">ML &amp; Data<br>Engineering</div>
+        <div class="service-desc" data-i18n="svc2_desc">Time series modeling, NLP and speech systems, deep learning fine-tuning, data warehouse design and transformation. We implement recent techniques from the literature — not just off-the-shelf pipelines.</div>
+        <div class="tags">
+          <span class="tag">PyTorch</span>
+          <span class="tag">Time series</span>
+          <span class="tag">NLP / STT</span>
+          <span class="tag">Fine-tuning</span>
+          <span class="tag">dbt / SQL</span>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">03</div>
+        <div class="service-title" data-i18n-html="svc3_title">Platform<br>Engineering</div>
+        <div class="service-desc" data-i18n="svc3_desc">Long-term software products from mobile to infrastructure — full-stack web, iOS, Android, CI/CD pipelines, server orchestration. Sustained delivery on production systems.</div>
+        <div class="tags">
+          <span class="tag">React</span>
+          <span class="tag">Android</span>
+          <span class="tag">PHP</span>
+          <span class="tag">Ansible</span>
+          <span class="tag">Docker</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN SOURCE -->
+<section id="oss">
+  <div class="section-inner">
+    <p class="section-label" data-i18n="oss_label">Open source</p>
+    <h2 class="section-title" data-i18n="oss_title">Lab tools, built in public</h2>
+    <p class="section-intro" data-i18n="oss_intro">An ecosystem of open-source software for wet lab automation and bioinformatics — developed in active collaboration with the Pinheiro Group at Human Technopole.</p>
+    <div class="oss-grid">
+      <div class="oss-card">
+        <span class="oss-status" data-i18n="oss_status">In development</span>
+        <div class="oss-name">GUIbiont</div>
+        <div class="oss-desc" data-i18n="guibiont_desc">A graphical interface for bacterial growth curve analysis — clustering, mathematical model fitting, and integration with the KinBiont.jl library. Designed to make quantitative microbial growth analysis accessible without leaving the lab's workflow.</div>
+        <div class="tags">
+          <span class="tag">Julia</span>
+          <span class="tag">KinBiont.jl</span>
+          <span class="tag">Growth curves</span>
+          <span class="tag">Clustering</span>
+        </div>
+        <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
+      </div>
+      <div class="oss-card">
+        <span class="oss-status" data-i18n="oss_status">In development</span>
+        <div class="oss-name">AutoGate</div>
+        <div class="oss-desc" data-i18n="autogate_desc">Automated gating for flow cytometry data. Removes the manual, subjective step of population gating with a reproducible, algorithm-driven pipeline — built to integrate with research workflows and produce publication-ready results.</div>
+        <div class="tags">
+          <span class="tag">Python</span>
+          <span class="tag">Flow cytometry</span>
+          <span class="tag">Gating</span>
+          <span class="tag">Reproducibility</span>
+        </div>
+        <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
+      </div>
+      <div class="oss-card">
+        <span class="oss-status" data-i18n="oss_status">In development</span>
+        <div class="oss-name">ChiBio UI</div>
+        <div class="oss-desc" data-i18n="chibio_desc">A new control interface for the chi.bio open bioreactor platform — finer experimental control, better data export, and a more capable operator experience than the original firmware allows.</div>
+        <div class="tags">
+          <span class="tag">ChiBio</span>
+          <span class="tag">Bioreactor</span>
+          <span class="tag">Hardware</span>
+          <span class="tag">Firmware</span>
+        </div>
+        <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="section-inner">
+    <p class="section-label" data-i18n="research_label">Research output</p>
+    <h2 class="section-title" data-i18n="research_title">An active research program</h2>
+    <p class="section-intro" data-i18n="research_intro">Fuzue participates in peer-reviewed research — not as a vendor, but as a collaborator embedded in the science.</p>
+    <div class="research-grid">
+
+      <div class="research-track">
+        <div class="track-label" data-i18n-html="track1_label">Track 01 — Wet lab &amp; bioinformatics</div>
+        <div class="track-title" data-i18n-html="track1_title">Microbial growth<br>&amp; lab automation</div>
+
+        <div class="research-item">
+          <span class="ri-badge published" data-i18n="ri1_badge">Published</span>
+          <div class="ri-text" data-i18n-html="ri1_text"><strong>Nature Communications</strong> — Kinbiont project, Pinheiro Group, Human Technopole, Milan. Software contributions to bacterial growth analysis and automated flow cytometry pipelines.<a href="https://www.nature.com/articles/s41467-025-61592-6" target="_blank">Read the article →</a><a href="https://www.nature.com/nature-index/institution-outputs/Poland/Fuzu%C3%AA%20Tech/68f0bc2db6e68d94150177b3" target="_blank">View Nature Index profile →</a></div>
+        </div>
+
+        <div class="research-item">
+          <span class="ri-badge progress" data-i18n="ri2_badge">In progress</span>
+          <div class="ri-text" data-i18n="ri2_text">Two further publications expected in 2025 — ongoing collaboration with the Pinheiro Group at Human Technopole, Milan.</div>
+        </div>
+
+        <div class="ni-box">
+          <div class="ni-num">#5</div>
+          <div class="ni-text" data-i18n-html="ni_text"><strong>Poland · Company research output</strong><br>Nature Index ranking — placing Fuzue alongside institutions far larger in headcount and budget. A consequence of the depth of collaboration, not volume.</div>
+        </div>
+      </div>
+
+      <div class="research-track">
+        <div class="track-label" data-i18n-html="track2_label">Track 02 — Scientific software methodology</div>
+        <div class="track-title" data-i18n-html="track2_title">Engineering practices<br>for science</div>
+
+        <div class="research-item">
+          <span class="ri-badge progress" data-i18n="ri3_badge">In progress</span>
+          <div class="ri-text" data-i18n="ri3_text">Rigorous software development practices for scientific pipelines: project planning, test-driven development, CI/CD, and reproducibility for research teams. Bridging the gap between software engineering discipline and scientific coding.</div>
+        </div>
+
+        <div class="research-item">
+          <span class="ri-badge progress" data-i18n="ri4_badge">Ongoing</span>
+          <div class="ri-text" data-i18n="ri4_text">The open-source tools (GUIbiont, AutoGate, ChiBio UI) are developed with the same rigor — documented, tested, and built to outlast the turnover of a research group.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="section-inner">
+    <p class="section-label" data-i18n="work_label">Selected work</p>
+    <h2 class="section-title" data-i18n="work_title">Recent engagements</h2>
+    <p class="section-intro" data-i18n="work_intro">Click any project to read more about the problem and approach.</p>
+    <div class="work-list">
+
+      <div class="work-item" onclick="toggleWork(this)">
+        <div class="work-header">
+          <div>
+            <div class="work-client" data-i18n="work1_client">Human Technopole · Pinheiro Group · Milan</div>
+            <div class="work-title" data-i18n-html="work1_title">Bacterial growth instrumentation &amp; bioinformatics</div>
+            <div class="work-summary" data-i18n="work1_summary">ChiBio hardware integration · flow cytometry pipelines · Nature Communications</div>
+          </div>
+          <span class="work-badge">Laboratory</span>
+        </div>
+        <div class="work-detail">
+          <div class="work-detail-inner">
+            <p data-i18n-html="work1_p1">Working with the Pinheiro Group at Human Technopole in Milan, we customised ChiBio bioreactor hardware to provide finer experimental control beyond what the standard firmware allows. We then built the daily-use interfaces for plate reader data analysis and <strong>automated flow cytometry gating pipelines</strong>, integrated into the Kinbiont framework.</p>
+            <p data-i18n-html="work1_p2">The software work contributed directly to a peer-reviewed publication in <em>Nature Communications</em> — listed under Fuzue Tech as the affiliated company. This is the basis of the #5 ranking among Polish companies in the Nature Index, and a rare distinction for a company in any field.</p>
+            <a class="work-outcome" href="https://www.nature.com/articles/s41467-025-61592-6" target="_blank" data-i18n="work1_out1">→ Read the article</a>
+            <a class="work-outcome" href="https://www.nature.com/nature-index/institution-outputs/Poland/Fuzu%C3%AA%20Tech/68f0bc2db6e68d94150177b3" target="_blank" data-i18n="work1_out2">→ View Nature Index profile</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-item" onclick="toggleWork(this)">
+        <div class="work-header">
+          <div>
+            <div class="work-client" data-i18n="work2_client">Digi Sapiens · B2B contract</div>
+            <div class="work-title" data-i18n-html="work2_title">ML engineering &amp; edtech platform development</div>
+            <div class="work-summary" data-i18n="work2_summary">App dev team lead · Android · data warehouse · speech-to-text alignment</div>
+          </div>
+          <span class="work-badge">ML / Data</span>
+        </div>
+        <div class="work-detail">
+          <div class="work-detail-inner">
+            <p data-i18n-html="work2_p1">As app development team lead at Digi Sapiens, work spanned the full technical stack: Android application development, data warehouse architecture, and a particularly demanding <strong>speech-to-text alignment problem</strong> — matching spoken audio to text transcripts at word and phoneme level for educational use.</p>
+            <p data-i18n-html="work2_p2">The alignment problem is <strong>NP-complete in its general form</strong>. The work involved surveying recent literature and developing a practical solution that performed well within the constraints of a production platform.</p>
+            <a class="work-outcome" href="#contact" onclick="goTo('#contact'); return false;" data-i18n="work2_out">→ Discuss a similar project</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-item" onclick="toggleWork(this)">
+        <div class="work-header">
+          <div>
+            <div class="work-client" data-i18n="work3_client">Follow The Grant · Investigative data journalism</div>
+            <div class="work-title" data-i18n="work3_title">Civic data pipeline: research conflict-of-interest investigation</div>
+            <div class="work-summary" data-i18n="work3_summary">15M relationships analyzed · European Science Journalism Award 2021 · BuzzFeed News, Frankfurter Rundschau, Business Insider</div>
+          </div>
+          <span class="work-badge">Civic Tech</span>
+        </div>
+        <div class="work-detail">
+          <div class="work-detail-inner">
+            <p data-i18n-html="work3_p1">Built the data engineering pipeline behind an award-winning cross-border investigation into undisclosed conflicts of interest in academic research. The pipeline processed and cross-referenced <strong>15 million potential researcher–industry relationships</strong> to identify systematic non-disclosure of pharmaceutical ties.</p>
+            <p data-i18n-html="work3_p2">The investigation was published in <strong>BuzzFeed News</strong>, <strong>Frankfurter Rundschau</strong>, <strong>Business Insider</strong>, and <strong>CIVIO</strong>. The project received the <strong>European Science Journalism Award 2021</strong> from the European Federation for Science Journalism.</p>
+            <a class="work-outcome" href="https://followthegrant.org/stories" target="_blank" data-i18n="work3_out">→ Read the investigation</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-item" onclick="toggleWork(this)">
+        <div class="work-header">
+          <div>
+            <div class="work-client" data-i18n="work4_client">Aula Education · Germany</div>
+            <div class="work-title" data-i18n-html="work4_title">Long-term platform development &amp; DevOps</div>
+            <div class="work-summary" data-i18n="work4_summary">Full-stack engineering on a production edtech platform used in German schools</div>
+          </div>
+          <span class="work-badge">Platform</span>
+        </div>
+        <div class="work-detail">
+          <div class="work-detail-inner">
+            <p data-i18n-html="work4_p1">Multi-year engagement on the Aula learning platform, deployed across schools in Germany. Work covered the full stack: PHP and React application development, MariaDB database management, <strong>Android and iOS mobile apps</strong>, GitHub Actions CI/CD workflows, and Ansible-based server provisioning and orchestration.</p>
+            <p data-i18n="work4_p2">The engagement demonstrates sustained delivery capacity on a production European SaaS product — from feature development to infrastructure reliability, across multiple concurrent workstreams.</p>
+            <a class="work-outcome" href="#contact" onclick="goTo('#contact'); return false;" data-i18n="work4_out">→ Discuss platform work</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-label" data-i18n="about_label">Who we are</p>
+    <div class="about-grid">
+      <div>
+        <img
+          src="https://avatars.githubusercontent.com/aivuk"
+          alt="Edgar Zanella Alvarenga"
+          class="about-photo"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
+        <div class="about-photo-fallback">Photo coming</div>
+      </div>
+      <div>
+        <div class="about-name">Edgar Zanella<br>Alvarenga</div>
+        <div class="about-role" data-i18n="about_role">Founder</div>
+        <div class="about-text">
+          <p data-i18n-html="about_p1">Fuzue is a technology company focused on research software engineering. Edgar founded the company after 20+ years of consulting across Europe and Brazil, and leads technical direction on every project. Depending on scope, we bring in specialists and collaborators — the team scales with the work.</p>
+          <p data-i18n-html="about_p2">Edgar has a background in <strong>physics</strong> and has worked with clients including <strong>Dell, Siemens</strong>, the <strong>Brazilian government</strong>, and leading European research institutions. He founded <strong>Open Knowledge Brazil</strong> and has built civic technology tools used at national scale.</p>
+          <p data-i18n-html="about_p3">Current focus is <strong>laboratory informatics</strong>, <strong>scientific software methodology</strong>, and an open-source wet lab tooling ecosystem in collaboration with Human Technopole, Milan.</p>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-item"><strong data-i18n-html="skill1_title">Laboratory &amp; bioinformatics</strong>Julia, Python, ChiBio, flow cytometry</div>
+          <div class="skill-item"><strong data-i18n-html="skill2_title">ML &amp; data engineering</strong>PyTorch, time series, NLP, STT, deep learning fine-tuning, dbt</div>
+          <div class="skill-item"><strong data-i18n-html="skill3_title">Backend &amp; databases</strong>PHP, Python, MariaDB / MySQL, REST APIs, Docker</div>
+          <div class="skill-item"><strong data-i18n-html="skill4_title">Frontend &amp; mobile</strong>React, TypeScript, Android (Java/Kotlin), iOS</div>
+          <div class="skill-item"><strong data-i18n-html="skill5_title">Infrastructure</strong>Linux, Ansible, GitHub Actions CI/CD</div>
+          <div class="skill-item"><strong data-i18n-html="skill6_title">Languages</strong>Portuguese, Italian, Spanish, German, Polish (learning)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="contact-left">
+        <p class="section-label" data-i18n="contact_label">Get in touch</p>
+        <h2 data-i18n-html="contact_h2">Start a<br><span>conversation</span></h2>
+        <p data-i18n="contact_p1">Laboratory, ML, and research collaboration projects are prioritised. Describe your project and we'll respond within 48 hours.</p>
+        <p data-i18n="contact_p2">Or write directly:</p>
+        <a class="contact-direct" href="mailto:contact@fuzue.tech">contact@fuzue.tech →</a>
+      </div>
+      <div>
+        <form class="contact-form" onsubmit="submitMailto(event)">
+          <div class="form-row">
+            <input type="text" id="fc-name" data-i18n-ph="form_name" placeholder="Your name">
+            <input type="email" id="fc-email" data-i18n-ph="form_email" placeholder="Email address">
+          </div>
+          <select id="fc-type" data-i18n-opts="form">
+            <option value="" disabled selected>Project type</option>
+            <option>Laboratory informatics / bioinformatics</option>
+            <option>Machine learning / data engineering</option>
+            <option>Platform / full-stack development</option>
+            <option>Hardware integration</option>
+            <option>Research collaboration</option>
+            <option>EU funding partnership</option>
+            <option>Other</option>
+          </select>
+          <textarea id="fc-msg" data-i18n-ph="form_msg" placeholder="Briefly describe your project, timeline, and budget range…"></textarea>
+          <button type="submit" class="contact-submit" data-i18n="form_submit">Send enquiry</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a class="footer-logo" href="#">Fuzue</a>
+    <div class="footer-links">
+      <a href="https://github.com/fuzue" target="_blank">GitHub</a>
+      <a href="https://www.nature.com/nature-index/institution-outputs/Poland/Fuzu%C3%AA%20Tech/68f0bc2db6e68d94150177b3" target="_blank">Nature Index</a>
+      <a href="mailto:contact@fuzue.tech">contact@fuzue.tech</a>
+    </div>
+    <span class="footer-copy" data-i18n="footer_copy">© 2026 Fuzue Tech sp. z o.o. · fuzue.tech</span>
+  </div>
+</footer>
+
+<script src="translations.js"></script>
+<script>
+  function goTo(selector) {
+    const el = document.querySelector(selector);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function toggleLangMenu(e) {
+    e.stopPropagation();
+    document.getElementById('langSwitcher').classList.toggle('open');
+  }
+  document.addEventListener('click', function() {
+    document.getElementById('langSwitcher').classList.remove('open');
+  });
+
+  // Compute gradient angle per badge so stripes match the clip-path diagonal exactly.
+  // The clip-path edge spans 14% of width horizontally across full height,
+  // so the perpendicular gradient angle = atan2(h, 0.14 * w).
+  // The stripe start position (58%) is constant regardless of dimensions.
+  function updateBadgeAngles() {
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.ri-badge.progress').forEach(badge => {
+        const w = badge.offsetWidth;
+        const h = badge.offsetHeight;
+        if (w && h) {
+          const angle = Math.atan2(h, 0.14 * w) * 180 / Math.PI;
+          badge.style.setProperty('--stripe-angle', angle + 'deg');
+        }
+      });
+    });
+  }
+  updateBadgeAngles();
+  window.addEventListener('resize', updateBadgeAngles);
+
+  // Patch applyLang to update the trigger label and close the menu
+  const _origApplyLang = applyLang;
+  applyLang = function(lang) {
+    _origApplyLang(lang);
+    const trigger = document.getElementById('langTrigger');
+    if (trigger) trigger.childNodes[0].textContent = lang.toUpperCase();
+    document.getElementById('langSwitcher').classList.remove('open');
+    updateBadgeAngles();
+  };
+
+  function submitMailto(e) {
+    e.preventDefault();
+    const name = document.getElementById('fc-name').value.trim();
+    const email = document.getElementById('fc-email').value.trim();
+    const type = document.getElementById('fc-type').value;
+    const msg = document.getElementById('fc-msg').value.trim();
+    const subject = encodeURIComponent('Project enquiry' + (type ? ': ' + type : ''));
+    const body = encodeURIComponent(
+      (name ? 'From: ' + name + (email ? ' <' + email + '>' : '') + '\n\n' : '') + msg
+    );
+    window.location.href = 'mailto:contact@fuzue.tech?subject=' + subject + '&body=' + body;
+  }
+
+  function toggleWork(item) {
+    const detail = item.querySelector('.work-detail');
+    const isOpen = detail.classList.contains('open');
+    document.querySelectorAll('.work-detail.open').forEach(d => d.classList.remove('open'));
+    if (!isOpen) detail.classList.add('open');
+  }
+</script>
+
+<script>
+  const themes = {
+    dark: {
+      '--bg':        '#080808',
+      '--surface':   '#111111',
+      '--surface2':  '#191919',
+      '--text':      '#FFFFFF',
+      '--muted':     '#C8C8C8',
+      '--border':    '#222222',
+      '--accent':    '#C8FF00',
+      '--accent-bg': 'rgba(200,255,0,0.07)',
+      '--accent-br': 'rgba(200,255,0,0.18)',
+      '--pf-1': 'rgba(255,255,255,0.08)',
+      '--pf-2': 'rgba(255,255,255,0.13)',
+      '--pf-3': 'rgba(255,255,255,0.08)',
+      '--pf-4': 'rgba(255,255,255,0.05)',
+      '--pf-5': 'rgba(255,255,255,0.03)',
+      '--pf-6': 'rgba(255,255,255,0.015)',
+    },
+    light: {
+      '--bg':        '#F5F4F0',
+      '--surface':   '#EAEAE6',
+      '--surface2':  '#E0DFDB',
+      '--text':      '#0A0A0A',
+      '--muted':     '#444444',
+      '--border':    '#CCCCCA',
+      '--accent':    '#E8006E',
+      '--accent-bg': 'rgba(232,0,110,0.07)',
+      '--accent-br': 'rgba(232,0,110,0.22)',
+      '--pf-1': 'rgba(0,0,0,0.07)',
+      '--pf-2': 'rgba(0,0,0,0.12)',
+      '--pf-3': 'rgba(0,0,0,0.07)',
+      '--pf-4': 'rgba(0,0,0,0.045)',
+      '--pf-5': 'rgba(0,0,0,0.025)',
+      '--pf-6': 'rgba(0,0,0,0.012)',
+    },
+  };
+
+  function applyTheme(name) {
+    const t = themes[name];
+    const root = document.documentElement;
+    Object.entries(t).forEach(([k, v]) => root.style.setProperty(k, v));
+    const nav = document.querySelector('nav');
+    nav.style.background = '#FFFFFF';
+    nav.style.borderBottomColor = t['--accent'];
+    document.querySelectorAll('.nav-links a').forEach(a => a.style.color = '#888');
+    const cta = document.querySelector('.nav-cta');
+    cta.style.background = name === 'light' ? '#E8006E' : '#080808';
+    cta.style.color = '#FFF';
+    const btn = document.getElementById('themeToggle');
+    btn.textContent = name === 'dark' ? '☀' : '☾';
+    btn.style.color = name === 'light' ? '#080808' : '#555';
+    document.documentElement.dataset.theme = name;
+    localStorage.setItem('fz-theme', name);
+    updateBadgeAngles();
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.dataset.theme || 'dark';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  }
+
+  // Initialise: saved preference → system preference → dark
+  (function() {
+    const saved = localStorage.getItem('fz-theme');
+    const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    applyTheme(saved || preferred);
+  })();
+
+  // Follow system changes when no manual override stored
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+    if (!localStorage.getItem('fz-theme')) applyTheme(e.matches ? 'light' : 'dark');
+  });
+</script>
+
+</body>
+</html>

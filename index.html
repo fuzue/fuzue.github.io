@@ -47,6 +47,7 @@
   }
   </script>
 
+  <link rel="icon" type="image/svg+xml" href="fuzue-favicon.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -187,16 +188,17 @@
     .nav-inner {
       max-width: var(--max);
       margin: 0 auto;
-      padding: 0 var(--pad);
-      height: 68px;
+      padding: 8px var(--pad);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 24px;
     }
     .nav-logo img {
-      height: 50px;
+      height: 40px;
+      width: auto;
       display: block;
+      flex-shrink: 0;
     }
     .nav-links {
       display: flex;
@@ -883,13 +885,18 @@
       flex-wrap: wrap;
     }
     footer .footer-logo {
-      font-family: var(--font-d);
-      font-weight: 900;
-      font-size: 22px;
-      letter-spacing: 0.04em;
-      color: #444;
       text-decoration: none;
-      text-transform: uppercase;
+      display: block;
+    }
+    footer .footer-logo img {
+      height: 22px;
+      display: block;
+    }
+    [data-theme="dark"] footer .footer-logo img {
+      filter: brightness(0) invert(1);
+    }
+    [data-theme="light"] footer .footer-logo img {
+      filter: none;
     }
     .footer-links {
       display: flex;
@@ -917,7 +924,7 @@
       :root { --pad: 20px; }
       .nav-links { display: none; }
       .theme-toggle { display: none; }
-      .nav-logo img { height: 32px; }
+      .nav-logo img { height: 31px; width: auto; }
       .nav-inner { gap: 12px; }
       .hero h1 { font-size: 52px; }
       .hero-stats { grid-template-columns: repeat(2, 1fr); row-gap: 28px; }
@@ -942,7 +949,7 @@
 <nav>
   <div class="nav-inner">
     <a class="nav-logo" href="#">
-      <img src="fuzue-logo.png" alt="Fuzue">
+      <img src="fuzue-01.svg" alt="Fuzue">
     </a>
     <ul class="nav-links">
       <li><a onclick="goTo('#services')" data-i18n="nav_services">Services</a></li>
@@ -1294,7 +1301,7 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <a class="footer-logo" href="#">Fuzue</a>
+    <a class="footer-logo" href="#"><img src="fuzue-01.svg" alt="Fuzue"></a>
     <div class="footer-links">
       <a href="https://github.com/fuzue" target="_blank">GitHub</a>
       <a href="https://www.nature.com/nature-index/institution-outputs/Poland/Fuzu%C3%AA%20Tech/68f0bc2db6e68d94150177b3" target="_blank">Nature Index</a>

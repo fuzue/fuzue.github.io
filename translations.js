@@ -34,6 +34,8 @@ const T = {
     guibiont_desc: "A graphical interface for bacterial growth curve analysis — clustering, mathematical model fitting, and integration with the KinBiont.jl library. Designed to make quantitative microbial growth analysis accessible without leaving the lab's workflow.",
     autogate_desc: "Automated gating for flow cytometry data. Removes the manual, subjective step of population gating with a reproducible, algorithm-driven pipeline — built to integrate with research workflows and produce publication-ready results.",
     chibio_desc: "A new control interface for the chi.bio open bioreactor platform — finer experimental control, better data export, and a more capable operator experience than the original firmware allows.",
+    densitree_desc: "Density-normalized clustering with minimum spanning tree construction for high-dimensional data. A state-of-the-art SPADE implementation that outperforms FlowSOM and PhenoGraph on standard benchmarks — usable for cytometry, single-cell, and any point-cloud data with imbalanced density.",
+    oss_released: "Released",
 
     research_label: "Research output",
     research_title: "An active research program",
@@ -147,6 +149,8 @@ const T = {
     guibiont_desc: "Un'interfaccia grafica per l'analisi delle curve di crescita batterica — clustering, adattamento di modelli matematici e integrazione con la libreria KinBiont.jl. Progettato per rendere l'analisi quantitativa della crescita microbica accessibile senza interrompere il flusso di lavoro del laboratorio.",
     autogate_desc: "Gating automatico per dati di citometria a flusso. Elimina il passaggio manuale e soggettivo del gating con una pipeline riproducibile e algoritmica — integrata nei flussi di lavoro di ricerca per risultati pronti alla pubblicazione.",
     chibio_desc: "Una nuova interfaccia di controllo per la piattaforma di bioreattori aperti chi.bio — controllo sperimentale più preciso, migliore esportazione dei dati e un'esperienza operativa più avanzata rispetto al firmware originale.",
+    densitree_desc: "Clustering basato sulla densità con costruzione di albero di copertura minimo per dati ad alta dimensionalità. Un'implementazione SPADE allo stato dell'arte che supera FlowSOM e PhenoGraph nei benchmark standard — utilizzabile per citometria, single-cell e qualsiasi dato con densità sbilanciata.",
+    oss_released: "Rilasciato",
 
     research_label: "Output di ricerca",
     research_title: "Un programma di ricerca attivo",
@@ -260,6 +264,8 @@ const T = {
     guibiont_desc: "Uma interface gráfica para análise de curvas de crescimento bacteriano — agrupamento, ajuste de modelos matemáticos e integração com a biblioteca KinBiont.jl. Projetado para tornar a análise quantitativa do crescimento microbiano acessível sem interromper o fluxo de trabalho do laboratório.",
     autogate_desc: "Gating automático para dados de citometria de fluxo. Elimina a etapa manual e subjetiva de gating de populações com um pipeline reproduzível e algorítmico — integrado a fluxos de trabalho de pesquisa para resultados prontos para publicação.",
     chibio_desc: "Uma nova interface de controle para a plataforma de biorreator aberto chi.bio — controle experimental mais preciso, melhor exportação de dados e experiência operacional mais avançada do que o firmware original.",
+    densitree_desc: "Clustering normalizado por densidade com construção de árvore geradora mínima para dados de alta dimensionalidade. Uma implementação SPADE estado-da-arte que supera FlowSOM e PhenoGraph em benchmarks padrão — utilizável para citometria, single-cell e qualquer dado com densidade desbalanceada.",
+    oss_released: "Lançado",
 
     research_label: "Produção científica",
     research_title: "Um programa de pesquisa ativo",
@@ -373,6 +379,8 @@ const T = {
     guibiont_desc: "Graficzny interfejs do analizy krzywych wzrostu bakteryjnego — klastrowanie, dopasowywanie modeli matematycznych i integracja z biblioteką KinBiont.jl. Zaprojektowany, aby uczynić ilościową analizę wzrostu drobnoustrojów dostępną bez przerywania pracy laboratorium.",
     autogate_desc: "Automatyczne gating dla danych cytometrii przepływowej. Eliminuje ręczny, subiektywny krok bramkowania populacji za pomocą reprodukowalnego potoku algorytmicznego — zintegrowanego z przepływami pracy badawczej.",
     chibio_desc: "Nowy interfejs sterowania dla otwartej platformy bioreaktorów chi.bio — precyzyjniejsza kontrola eksperymentów, lepszy eksport danych i bardziej zaawansowane doświadczenie operatora niż oryginalne oprogramowanie.",
+    densitree_desc: "Klastrowanie znormalizowane gęstością z konstrukcją minimalnego drzewa rozpinającego dla danych wielowymiarowych. Najnowocześniejsza implementacja SPADE, która przewyższa FlowSOM i PhenoGraph w standardowych benchmarkach — do cytometrii, single-cell i dowolnych danych z niezrównoważoną gęstością.",
+    oss_released: "Wydano",
 
     research_label: "Wyniki badań",
     research_title: "Aktywny program badawczy",

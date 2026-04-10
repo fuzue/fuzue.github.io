@@ -37,6 +37,7 @@ const T = {
     densitree_desc: "Density-normalized clustering with minimum spanning tree construction for high-dimensional data. A state-of-the-art SPADE implementation that outperforms FlowSOM and PhenoGraph on standard benchmarks — usable for cytometry, single-cell, and any point-cloud data with imbalanced density.",
     kinbiont_desc: "An ecosystem of numerical methods for microbial kinetics data analysis — from preprocessing to result interpretation. Covers growth curve fitting, model selection, segmentation, and comparative analysis across experimental conditions. Developed with the Pinheiro Group at Human Technopole.",
     oss_released: "Released",
+    oss_more: "More tools in progress",
 
     research_label: "Research output",
     research_title: "An active research program",
@@ -153,6 +154,7 @@ const T = {
     densitree_desc: "Clustering basato sulla densità con costruzione di albero di copertura minimo per dati ad alta dimensionalità. Un'implementazione SPADE allo stato dell'arte che supera FlowSOM e PhenoGraph nei benchmark standard — utilizzabile per citometria, single-cell e qualsiasi dato con densità sbilanciata.",
     kinbiont_desc: "Un ecosistema di metodi numerici per l'analisi dei dati di cinetica microbica — dalla pre-elaborazione all'interpretazione dei risultati. Include adattamento di curve di crescita, selezione di modelli, segmentazione e analisi comparativa tra condizioni sperimentali. Sviluppato con il Pinheiro Group al Human Technopole.",
     oss_released: "Rilasciato",
+    oss_more: "Altri strumenti in arrivo",
 
     research_label: "Output di ricerca",
     research_title: "Un programma di ricerca attivo",
@@ -269,6 +271,7 @@ const T = {
     densitree_desc: "Clustering normalizado por densidade com construção de árvore geradora mínima para dados de alta dimensionalidade. Uma implementação SPADE estado-da-arte que supera FlowSOM e PhenoGraph em benchmarks padrão — utilizável para citometria, single-cell e qualquer dado com densidade desbalanceada.",
     kinbiont_desc: "Um ecossistema de métodos numéricos para análise de dados de cinética microbiana — do pré-processamento à interpretação de resultados. Inclui ajuste de curvas de crescimento, seleção de modelos, segmentação e análise comparativa entre condições experimentais. Desenvolvido com o Pinheiro Group no Human Technopole.",
     oss_released: "Lançado",
+    oss_more: "Mais ferramentas em desenvolvimento",
 
     research_label: "Produção científica",
     research_title: "Um programa de pesquisa ativo",
@@ -385,6 +388,7 @@ const T = {
     densitree_desc: "Klastrowanie znormalizowane gęstością z konstrukcją minimalnego drzewa rozpinającego dla danych wielowymiarowych. Najnowocześniejsza implementacja SPADE, która przewyższa FlowSOM i PhenoGraph w standardowych benchmarkach — do cytometrii, single-cell i dowolnych danych z niezrównoważoną gęstością.",
     kinbiont_desc: "Ekosystem metod numerycznych do analizy danych kinetyki mikrobiologicznej — od wstępnego przetwarzania po interpretację wyników. Obejmuje dopasowanie krzywych wzrostu, wybór modeli, segmentację i analizę porównawczą między warunkami eksperymentalnymi. Opracowany z Pinheiro Group w Human Technopole.",
     oss_released: "Wydano",
+    oss_more: "Kolejne narzędzia w przygotowaniu",
 
     research_label: "Wyniki badań",
     research_title: "Aktywny program badawczy",

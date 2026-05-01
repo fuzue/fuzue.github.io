@@ -512,6 +512,10 @@ function applyLang(lang) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('fz-lang') || 'en';
-  applyLang(saved);
+  const domainLang = { 'fuzue.it': 'it', 'fuzue.pl': 'pl' };
+  const urlParam = new URLSearchParams(window.location.search).get('lang');
+  const hostLang = domainLang[window.location.hostname];
+  const lang = urlParam || hostLang || localStorage.getItem('fz-lang') || 'en';
+  const supported = Object.keys(T);
+  applyLang(supported.includes(lang) ? lang : 'en');
 });

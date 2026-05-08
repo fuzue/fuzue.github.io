@@ -459,6 +459,33 @@
       background: var(--border);
       border: 1px solid var(--border);
     }
+    .oss-cluster + .oss-cluster { margin-top: 56px; }
+    .oss-cluster-label {
+      font-family: var(--font-m);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .oss-cluster-label::before { content: '/'; color: var(--accent); }
+    .oss-cluster-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .oss-cluster-credit {
+      font-size: 14px;
+      color: var(--muted);
+      margin: -8px 0 22px;
+    }
+    .oss-cluster.cluster-ai .oss-grid,
+    .oss-cluster.cluster-lab .oss-grid { grid-template-columns: repeat(2, 1fr); }
+    .oss-cluster.cluster-sci .oss-grid { grid-template-columns: 1fr; }
     .oss-card {
       background: var(--bg);
       padding: 32px 28px;
@@ -953,7 +980,11 @@
       .services-grid { grid-template-columns: 1fr; }
       .service-card { border-right: none; border-bottom: 1px solid var(--border); }
       .service-card:last-child { border-bottom: none; }
-      .oss-grid { grid-template-columns: 1fr; }
+      .oss-grid,
+      .oss-cluster.cluster-ai .oss-grid,
+      .oss-cluster.cluster-lab .oss-grid,
+      .oss-cluster.cluster-sci .oss-grid { grid-template-columns: 1fr; }
+      .oss-cluster + .oss-cluster { margin-top: 40px; }
       .research-grid { grid-template-columns: 1fr; }
       .about-grid { grid-template-columns: 1fr; }
       .about-photo { width: 100%; aspect-ratio: 3/4; max-width: 320px; }
@@ -1079,77 +1110,107 @@
 <section id="oss">
   <div class="section-inner">
     <p class="section-label" data-i18n="oss_label">Open source</p>
-    <h2 class="section-title" data-i18n="oss_title">Lab tools, built in public</h2>
-    <p class="section-intro" data-i18n-html="oss_intro">An ecosystem of open-source software for wet lab automation and bioinformatics — developed in active collaboration with the <a href="https://humantechnopole.it/en/research-groups/pinheiro-group/" target="_blank">Pinheiro Group</a> at <a href="https://htechnopole.it/" target="_blank">Human Technopole</a>.</p>
-    <div class="oss-grid">
-      <div class="oss-card">
-        <span class="oss-status" style="background:rgba(0,200,100,0.12);color:#00c864;border-color:rgba(0,200,100,0.25);" data-i18n="oss_released">Released</span>
-        <div class="oss-name">densitree</div>
-        <div class="oss-desc" data-i18n="densitree_desc">Density-normalized clustering with minimum spanning tree construction for high-dimensional data. A state-of-the-art SPADE implementation that outperforms FlowSOM and PhenoGraph on standard benchmarks — usable for cytometry, single-cell, and any point-cloud data with imbalanced density.</div>
-        <div class="tags">
-          <span class="tag">Python</span>
-          <span class="tag">Clustering</span>
-          <span class="tag">SPADE</span>
-          <span class="tag">Cytometry</span>
-          <span class="tag">scikit-learn</span>
+    <h2 class="section-title" data-i18n="oss_title">Built in public</h2>
+    <p class="section-intro" data-i18n="oss_intro">An ecosystem of open-source software — from AI &amp; ML tools to scientific computing to applications built around specific lab workflows.</p>
+
+    <div class="oss-cluster cluster-ai">
+      <p class="oss-cluster-label" data-i18n="cluster_ai_label">AI &amp; ML tools</p>
+      <div class="oss-grid">
+        <div class="oss-card">
+          <span class="oss-status" style="background:rgba(0,200,100,0.12);color:#00c864;border-color:rgba(0,200,100,0.25);" data-i18n="oss_released">Released</span>
+          <div class="oss-name">densitree</div>
+          <div class="oss-desc" data-i18n="densitree_desc">Density-normalized clustering with minimum spanning tree construction for high-dimensional data. A state-of-the-art SPADE implementation that outperforms FlowSOM and PhenoGraph on standard benchmarks — usable for cytometry, single-cell, and any point-cloud data with imbalanced density.</div>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">Clustering</span>
+            <span class="tag">SPADE</span>
+            <span class="tag">scikit-learn</span>
+          </div>
+          <a class="oss-link" href="https://densitree.fuzue.tech" target="_blank">densitree.fuzue.tech →</a>
+          <a class="oss-link" href="https://github.com/fuzue/densitree" target="_blank">github.com/fuzue/densitree →</a>
         </div>
-        <a class="oss-link" href="https://densitree.fuzue.tech" target="_blank">densitree.fuzue.tech →</a>
-        <a class="oss-link" href="https://github.com/fuzue/densitree" target="_blank">github.com/fuzue/densitree →</a>
-      </div>
-      <div class="oss-card">
-        <span class="oss-status" style="background:rgba(0,200,100,0.12);color:#00c864;border-color:rgba(0,200,100,0.25);" data-i18n="oss_released">Released</span>
-        <div class="oss-name">KinBiont.jl</div>
-        <div class="oss-desc" data-i18n-html="kinbiont_desc">An ecosystem of numerical methods for microbial kinetics data analysis — from preprocessing to result interpretation. Covers growth curve fitting, model selection, segmentation, and comparative analysis across experimental conditions. Developed with the <a href="https://humantechnopole.it/en/research-groups/pinheiro-group/" target="_blank">Pinheiro Group</a> at <a href="https://htechnopole.it/" target="_blank">Human Technopole</a>.</div>
-        <div class="tags">
-          <span class="tag">Julia</span>
-          <span class="tag">Microbial growth</span>
-          <span class="tag">Kinetics</span>
-          <span class="tag">Model fitting</span>
+        <div class="oss-card">
+          <span class="oss-status" style="background:rgba(0,200,100,0.12);color:#00c864;border-color:rgba(0,200,100,0.25);" data-i18n="oss_released">Released</span>
+          <div class="oss-name">pamiec</div>
+          <div class="oss-desc" data-i18n="pamiec_desc">Persistent, queryable memory for Claude Code — a hierarchical knowledge graph that captures the people, projects, and decisions discussed across sessions, then surfaces the right slice automatically when it's relevant. Inspired by GAM (arxiv 2604.12285).</div>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">Knowledge graph</span>
+            <span class="tag">Claude Code</span>
+            <span class="tag">MCP</span>
+            <span class="tag">SQLite</span>
+          </div>
+          <a class="oss-link" href="https://pamiec.fuzue.tech" target="_blank">pamiec.fuzue.tech →</a>
+          <a class="oss-link" href="https://github.com/fuzue/pamiec" target="_blank">github.com/fuzue/pamiec →</a>
         </div>
-        <a class="oss-link" href="https://github.com/pinheiroGroup/KinBiont.jl" target="_blank">github.com/pinheiroGroup/KinBiont.jl →</a>
-        <a class="oss-link" href="https://github.com/fuzue/pykinbiont" target="_blank">github.com/fuzue/pykinbiont →</a>
-        <a class="oss-link" href="https://pinheirogroup.github.io/ecoli-knockout-growth-atlas/" target="_blank">E. coli knockout growth atlas →</a>
       </div>
-      <div class="oss-card">
-        <span class="oss-status" data-i18n="oss_status">In development</span>
-        <div class="oss-name">GUIbiont</div>
-        <div class="oss-desc" data-i18n="guibiont_desc">A graphical interface for bacterial growth curve analysis — clustering, mathematical model fitting, and integration with the KinBiont.jl library. Designed to make quantitative microbial growth analysis accessible without leaving the lab's workflow.</div>
-        <div class="tags">
-          <span class="tag">Julia</span>
-          <span class="tag">KinBiont.jl</span>
-          <span class="tag">Growth curves</span>
-          <span class="tag">Clustering</span>
+    </div>
+
+    <div class="oss-cluster cluster-sci">
+      <p class="oss-cluster-label" data-i18n="cluster_sci_label">Scientific computing</p>
+      <div class="oss-grid">
+        <div class="oss-card">
+          <span class="oss-status" style="background:rgba(0,200,100,0.12);color:#00c864;border-color:rgba(0,200,100,0.25);" data-i18n="oss_released">Released</span>
+          <div class="oss-name">KinBiont.jl</div>
+          <div class="oss-desc" data-i18n-html="kinbiont_desc">An ecosystem of numerical methods for microbial kinetics data analysis — from preprocessing to result interpretation. Covers growth curve fitting, model selection, segmentation, and comparative analysis across experimental conditions. Developed with the <a href="https://humantechnopole.it/en/research-groups/pinheiro-group/" target="_blank">Pinheiro Group</a> at <a href="https://htechnopole.it/" target="_blank">Human Technopole</a>.</div>
+          <div class="tags">
+            <span class="tag">Julia</span>
+            <span class="tag">Microbial growth</span>
+            <span class="tag">Kinetics</span>
+            <span class="tag">Model fitting</span>
+          </div>
+          <a class="oss-link" href="https://github.com/pinheiroGroup/KinBiont.jl" target="_blank">github.com/pinheiroGroup/KinBiont.jl →</a>
+          <a class="oss-link" href="https://github.com/fuzue/pykinbiont" target="_blank">github.com/fuzue/pykinbiont →</a>
+          <a class="oss-link" href="https://pinheirogroup.github.io/ecoli-knockout-growth-atlas/" target="_blank">E. coli knockout growth atlas →</a>
         </div>
-        <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
       </div>
-      <div class="oss-card">
-        <span class="oss-status" data-i18n="oss_status">In development</span>
-        <div class="oss-name">AutoGate</div>
-        <div class="oss-desc" data-i18n="autogate_desc">Automated gating for flow cytometry data. Removes the manual, subjective step of population gating with a reproducible, algorithm-driven pipeline — built to integrate with research workflows and produce publication-ready results.</div>
-        <div class="tags">
-          <span class="tag">Python</span>
-          <span class="tag">Flow cytometry</span>
-          <span class="tag">Gating</span>
-          <span class="tag">Reproducibility</span>
+    </div>
+
+    <div class="oss-cluster cluster-lab">
+      <p class="oss-cluster-label" data-i18n="cluster_lab_label">Lab tooling</p>
+      <p class="oss-cluster-credit" data-i18n-html="cluster_lab_credit">Developed in active collaboration with the <a href="https://humantechnopole.it/en/research-groups/pinheiro-group/" target="_blank">Pinheiro Group</a> at <a href="https://htechnopole.it/" target="_blank">Human Technopole</a>.</p>
+      <div class="oss-grid">
+        <div class="oss-card">
+          <span class="oss-status" data-i18n="oss_status">In development</span>
+          <div class="oss-name">GUIbiont</div>
+          <div class="oss-desc" data-i18n="guibiont_desc">A graphical interface for bacterial growth curve analysis — clustering, mathematical model fitting, and integration with the KinBiont.jl library. Designed to make quantitative microbial growth analysis accessible without leaving the lab's workflow.</div>
+          <div class="tags">
+            <span class="tag">Julia</span>
+            <span class="tag">KinBiont.jl</span>
+            <span class="tag">Growth curves</span>
+            <span class="tag">Clustering</span>
+          </div>
+          <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
         </div>
-        <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
-      </div>
-      <div class="oss-card">
-        <span class="oss-status" data-i18n="oss_status">In development</span>
-        <div class="oss-name">ChiBio UI</div>
-        <div class="oss-desc" data-i18n="chibio_desc">A new control interface for the chi.bio open bioreactor platform — finer experimental control, better data export, and a more capable operator experience than the original firmware allows.</div>
-        <div class="tags">
-          <span class="tag">ChiBio</span>
-          <span class="tag">Bioreactor</span>
-          <span class="tag">Hardware</span>
-          <span class="tag">Firmware</span>
+        <div class="oss-card">
+          <span class="oss-status" data-i18n="oss_status">In development</span>
+          <div class="oss-name">AutoGate</div>
+          <div class="oss-desc" data-i18n="autogate_desc">Automated gating for flow cytometry data. Removes the manual, subjective step of population gating with a reproducible, algorithm-driven pipeline — built to integrate with research workflows and produce publication-ready results.</div>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">Flow cytometry</span>
+            <span class="tag">Gating</span>
+            <span class="tag">Reproducibility</span>
+          </div>
+          <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
         </div>
-        <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
-      </div>
-      <div class="oss-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;border-style:dashed;opacity:0.5;">
-        <div style="font-size:2.4rem;line-height:1;margin-bottom:0.5rem;color:var(--muted);">+</div>
-        <div class="oss-desc" style="text-align:center;" data-i18n="oss_more">More tools in progress</div>
-        <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
+        <div class="oss-card">
+          <span class="oss-status" data-i18n="oss_status">In development</span>
+          <div class="oss-name">ChiBio UI</div>
+          <div class="oss-desc" data-i18n="chibio_desc">A new control interface for the chi.bio open bioreactor platform — finer experimental control, better data export, and a more capable operator experience than the original firmware allows.</div>
+          <div class="tags">
+            <span class="tag">ChiBio</span>
+            <span class="tag">Bioreactor</span>
+            <span class="tag">Hardware</span>
+            <span class="tag">Firmware</span>
+          </div>
+          <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
+        </div>
+        <div class="oss-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;border-style:dashed;opacity:0.5;">
+          <div style="font-size:2.4rem;line-height:1;margin-bottom:0.5rem;color:var(--muted);">+</div>
+          <div class="oss-desc" style="text-align:center;" data-i18n="oss_more">More tools in progress</div>
+          <a class="oss-link" href="https://github.com/fuzue" target="_blank">github.com/fuzue →</a>
+        </div>
       </div>
     </div>
   </div>

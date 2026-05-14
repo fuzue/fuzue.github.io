@@ -486,8 +486,25 @@
     .oss-cluster-credit a, .oss-cluster-credit a:visited { color: var(--accent); text-decoration: none; }
     .oss-cluster-credit a:hover { opacity: 0.7; }
     .oss-cluster.cluster-ai .oss-grid,
+    .oss-cluster.cluster-sci .oss-grid,
     .oss-cluster.cluster-lab .oss-grid { grid-template-columns: repeat(2, 1fr); }
-    .oss-cluster.cluster-sci .oss-grid { grid-template-columns: 1fr; }
+    .oss-browse-all {
+      margin-top: 56px;
+      text-align: center;
+    }
+    .oss-browse-all a {
+      font-family: var(--font-m);
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--accent-br);
+      padding-bottom: 4px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .oss-browse-all a strong { color: var(--text); font-weight: 500; }
+    .oss-browse-all a:hover { color: var(--accent); border-color: var(--accent); }
+    .oss-browse-all a:hover strong { color: var(--accent); }
     .oss-card {
       background: var(--bg);
       padding: 32px 28px;
@@ -1133,7 +1150,7 @@
         </div>
         <div class="oss-card">
           <span class="oss-status" style="background:rgba(0,200,100,0.12);color:#00c864;border-color:rgba(0,200,100,0.25);" data-i18n="oss_released">Released</span>
-          <div class="oss-name">pamiec</div>
+          <div class="oss-name">pamięć</div>
           <div class="oss-desc" data-i18n="pamiec_desc">Persistent, queryable memory for Claude Code — a hierarchical knowledge graph that captures the people, projects, and decisions discussed across sessions, then surfaces the right slice automatically when it's relevant. Inspired by GAM (arxiv 2604.12285).</div>
           <div class="tags">
             <span class="tag">Python</span>
@@ -1229,6 +1246,10 @@
         </div>
       </div>
     </div>
+
+    <p class="oss-browse-all">
+      <a href="https://github.com/fuzue" target="_blank" data-i18n-html="oss_browse_all">Browse all open-source projects at <strong>github.com/fuzue</strong> →</a>
+    </p>
   </div>
 </section>
 

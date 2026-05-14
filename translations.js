@@ -44,6 +44,7 @@ const T = {
     pamiec_desc: "Persistent, queryable memory for Claude Code — a hierarchical knowledge graph that captures the people, projects, and decisions discussed across sessions, then surfaces the right slice automatically when it's relevant. Inspired by GAM (arxiv 2604.12285).",
     oss_released: "Released",
     oss_more: "More tools in progress",
+    oss_browse_all: "Browse all open-source projects at <strong>github.com/fuzue</strong> →",
 
     research_label: "Research output",
     research_title: "An active research program",
@@ -167,6 +168,7 @@ const T = {
     bayesbiont_desc: "Il complemento bayesiano di KinBiont.jl. Campiona l'intera posteriori con NUTS via Turing.jl, supporta il pooling gerarchico tra replicati con una riparametrizzazione non centrata, e confronta modelli concorrenti con PSIS-LOO. Per quando contano l'incertezza calibrata e il confronto rigoroso tra modelli.",
     pamiec_desc: "Memoria persistente e consultabile per Claude Code — un grafo di conoscenza gerarchico che cattura persone, progetti e decisioni discusse tra le sessioni, poi richiama automaticamente la porzione rilevante quando serve. Ispirato da GAM (arxiv 2604.12285).",
     oss_released: "Rilasciato",
+    oss_browse_all: "Sfoglia tutti i progetti open source su <strong>github.com/fuzue</strong> →",
     oss_more: "Altri strumenti in arrivo",
 
     research_label: "Output di ricerca",
@@ -292,6 +294,7 @@ const T = {
     pamiec_desc: "Memória persistente e consultável para Claude Code — um grafo de conhecimento hierárquico que captura pessoas, projetos e decisões discutidos entre sessões, e depois apresenta automaticamente a fatia relevante quando necessário. Inspirado em GAM (arxiv 2604.12285).",
     oss_released: "Lançado",
     oss_more: "Mais ferramentas em desenvolvimento",
+    oss_browse_all: "Veja todos os projetos open-source em <strong>github.com/fuzue</strong> →",
 
     research_label: "Produção científica",
     research_title: "Um programa de pesquisa ativo",
@@ -416,6 +419,7 @@ const T = {
     pamiec_desc: "Trwała, dostępna pamięć dla Claude Code — hierarchiczny graf wiedzy, który wychwytuje osoby, projekty i decyzje omawiane między sesjami, a następnie automatycznie pokazuje istotny fragment, gdy jest potrzebny. Zainspirowany pracą GAM (arxiv 2604.12285).",
     oss_released: "Wydano",
     oss_more: "Kolejne narzędzia w przygotowaniu",
+    oss_browse_all: "Przeglądaj wszystkie projekty open source na <strong>github.com/fuzue</strong> →",
 
     research_label: "Wyniki badań",
     research_title: "Aktywny program badawczy",

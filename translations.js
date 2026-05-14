@@ -29,7 +29,7 @@ const T = {
 
     oss_label: "Open source",
     oss_title: "Built in public",
-    oss_intro: "An ecosystem of open-source software — from AI & ML tools to scientific computing to applications built around specific lab workflows.",
+    oss_intro: "An ecosystem of <a href=\"https://github.com/fuzue\" target=\"_blank\">open-source</a> software — from AI & ML tools to scientific computing to applications built around specific lab workflows.",
     cluster_ai_label: "AI & ML tools",
     cluster_sci_label: "Scientific computing",
     cluster_lab_label: "Lab tooling",
@@ -154,7 +154,7 @@ const T = {
 
     oss_label: "Open source",
     oss_title: "Sviluppato pubblicamente",
-    oss_intro: "Un ecosistema di software open-source — dagli strumenti di AI & ML al calcolo scientifico, fino alle applicazioni costruite attorno a specifici flussi di lavoro di laboratorio.",
+    oss_intro: "Un ecosistema di software <a href=\"https://github.com/fuzue\" target=\"_blank\">open-source</a> — dagli strumenti di AI & ML al calcolo scientifico, fino alle applicazioni costruite attorno a specifici flussi di lavoro di laboratorio.",
     cluster_ai_label: "Strumenti AI & ML",
     cluster_sci_label: "Calcolo scientifico",
     cluster_lab_label: "Strumenti di laboratorio",
@@ -279,7 +279,7 @@ const T = {
 
     oss_label: "Open source",
     oss_title: "Desenvolvido abertamente",
-    oss_intro: "Um ecossistema de software open-source — de ferramentas de AI & ML à computação científica, até aplicações construídas em torno de fluxos de trabalho específicos de laboratório.",
+    oss_intro: "Um ecossistema de software <a href=\"https://github.com/fuzue\" target=\"_blank\">open-source</a> — de ferramentas de AI & ML à computação científica, até aplicações construídas em torno de fluxos de trabalho específicos de laboratório.",
     cluster_ai_label: "Ferramentas AI & ML",
     cluster_sci_label: "Computação científica",
     cluster_lab_label: "Ferramentas de laboratório",
@@ -404,7 +404,7 @@ const T = {
 
     oss_label: "Open source",
     oss_title: "Tworzone publicznie",
-    oss_intro: "Ekosystem oprogramowania open-source — od narzędzi AI i ML, przez obliczenia naukowe, po aplikacje zbudowane wokół konkretnych przepływów pracy laboratoryjnej.",
+    oss_intro: "Ekosystem oprogramowania <a href=\"https://github.com/fuzue\" target=\"_blank\">open-source</a> — od narzędzi AI i ML, przez obliczenia naukowe, po aplikacje zbudowane wokół konkretnych przepływów pracy laboratoryjnej.",
     cluster_ai_label: "Narzędzia AI i ML",
     cluster_sci_label: "Obliczenia naukowe",
     cluster_lab_label: "Narzędzia laboratoryjne",

@@ -1,0 +1,41 @@
+[Unit]
+Description=GoatCounter web analytics
+Documentation=https://www.goatcounter.com/help/self-host
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=goatcounter
+Group=goatcounter
+WorkingDirectory=/var/lib/goatcounter
+
+# Loopback only: Apache owns :80/:443 on this host, terminates TLS, and
+# reverse-proxies to us. Port 8099 was picked because nothing else on the box
+# listens on it or references it in an Apache vhost.
+ExecStart=/usr/local/bin/goatcounter serve \
+    -listen 127.0.0.1:8099 \
+    -tls none \
+    -db sqlite+/var/lib/goatcounter/goatcounter-data/db.sqlite3 \
+    -automigrate
+
+Restart=on-failure
+RestartSec=5s
+
+# Hardening — GoatCounter only needs its own data directory and the network.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/goatcounter
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6
+RestrictNamespaces=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

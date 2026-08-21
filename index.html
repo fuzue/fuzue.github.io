@@ -1517,6 +1517,26 @@
   </div>
 </footer>
 
+<!-- Analytics: self-hosted GoatCounter, cookieless. See analytics/README.md -->
+<script>
+  // no_onload: we count by hand once the language is known, so the pageview
+  // carries it. Hits raised before count.js finishes loading are queued.
+  window.goatcounter = { no_onload: true };
+  (function() {
+    const pending = [];
+    window.countHit = function(vars) {
+      if (window.goatcounter && window.goatcounter.count) window.goatcounter.count(vars);
+      else pending.push(vars);
+    };
+    window.flushHits = function() {
+      while (pending.length) window.goatcounter.count(pending.shift());
+    };
+  })();
+</script>
+<script async src="https://stats.fuzue.tech/count.js"
+        data-goatcounter="https://stats.fuzue.tech/count"
+        onload="flushHits()"></script>
+
 <script src="translations.js"></script>
 <script>
   function goTo(selector) {
@@ -1551,7 +1571,10 @@
   updateBadgeAngles();
   window.addEventListener('resize', updateBadgeAngles);
 
-  // Patch applyLang to update the trigger label and close the menu
+  // Patch applyLang to update the trigger label, close the menu, and report to
+  // analytics. The first call is the initial render, so it counts as the
+  // pageview; later calls are the visitor switching language.
+  let langCounted = false;
   const _origApplyLang = applyLang;
   applyLang = function(lang) {
     _origApplyLang(lang);
@@ -1559,6 +1582,13 @@
     if (trigger) trigger.childNodes[0].textContent = lang.toUpperCase();
     document.getElementById('langSwitcher').classList.remove('open');
     updateBadgeAngles();
+
+    if (!langCounted) {
+      langCounted = true;
+      countHit({ path: location.pathname + '?lang=' + lang, title: document.title });
+    } else {
+      countHit({ path: 'lang-switch-' + lang, title: 'Language switch: ' + lang, event: true });
+    }
   };
 
   function submitMailto(e) {
